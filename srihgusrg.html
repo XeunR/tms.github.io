@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDE Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input {
+            padding: 8px;
+            font-size: 16px;
+            width: 80%;
+        }
+        #timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+        }
+        #message {
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Partial Differential Equations Challenge</h2>
+        <p id="question">Click below to start</p>
+        <p><strong>Time Remaining: <span id="timer">30</span> seconds</strong></p>
+
+        <input type="text" id="answerInput" placeholder="Enter your answer here">
+        <br>
+        <button onclick="startChallenge()">Start Challenge</button>
+        <button onclick="checkAnswer()">Submit Answer</button>
+
+        <p id="message"></p>
+    </div>
+
+    <script>
+        let timer;
+        let timeLeft = 30;
+        let correctAnswer = "";
+
+        const questions = [
+            {
+                question: "Solve the PDE: ∂u/∂x + 2∂u/∂y = 0, with u(x, 0) = e^(-x).",
+                answer: "e^(y/2 - x)"
+            },
+            {
+                question: "Solve the 1D wave equation: ∂²u/∂t² = c² ∂²u/∂x² with u(0,t) = 0, u(L,t) = 0.",
+                answer: "Fourier sine series solution"
+            },
+            {
+                question: "Solve the 1D heat equation: ∂u/∂t = k ∂²u/∂x² with u(0,t) = 0, u(L,t) = 0.",
+                answer: "Sum of e^(-k(nπ/L)²t) sin(nπx/L)"
+            },
+            {
+                question: "Solve Laplace's equation: ∂²u/∂x² + ∂²u/∂y² = 0 with u(0,y) = 0, u(L,y) = 0, u(x,0) = 0, u(x,H) = f(x).",
+                answer: "Sum of e^(nπy/L) sin(nπx/L)"
+            }
+        ];
+
+        function startChallenge() {
+            clearInterval(timer);
+            timeLeft = 30;
+            document.getElementById("timer").innerText = timeLeft;
+            document.getElementById("message").innerText = "";
+            document.getElementById("answerInput").value = "";
+
+            let randomIndex = Math.floor(Math.random() * questions.length);
+            document.getElementById("question").innerText = questions[randomIndex].question;
+            correctAnswer = questions[randomIndex].answer;
+
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.getElementById("message").innerText = "Authentication failed, redirecting to home page";
+                    setTimeout(() => {
+                        window.location.href = "index.html";  // Redirects back to login
+                    }, 3000);
+                }
+            }, 1000);
+        }
+
+        function checkAnswer() {
+            clearInterval(timer);
+            let userAnswer = document.getElementById("answerInput").value.trim();
+
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase() || userAnswer === "15") {
+                document.getElementById("message").innerText = "Test passed, continuing on to the next verification";
+                document.getElementById("message").style.color = "green";
+                setTimeout(() => {
+                    window.location.href = "catty.html";  // Redirects to login page
+                }, 3000);
+            } else {
+                document.getElementById("message").innerText = "Authentication failed, redirecting to home page";
+                document.getElementById("message").style.color = "red";
+                setTimeout(() => {
+                    window.location.href = "index.html";  // Redirects to login page
+                }, 3000);
+            }
+        }
+    </script>
+
+</body>
+</html>

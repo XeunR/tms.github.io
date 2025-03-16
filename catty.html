@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impossible CAPTCHA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .captcha-container {
+            margin: auto;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 10px;
+            background: white;
+            display: inline-block;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .captcha-box {
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-decoration: line-through;
+            background: linear-gradient(45deg, #ff0000, #0000ff);
+            color: transparent;
+            -webkit-background-clip: text;
+            display: inline-block;
+            transform: rotate(-10deg) skewX(10deg);
+            filter: blur(1px) contrast(200%);
+            user-select: none;
+            padding: 10px;
+        }
+        input {
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="captcha-container">
+        <h2>Prove You're Not a Human</h2>
+        <p class="captcha-box" id="captchaText"></p>
+        <p>Type what you see above:</p>
+        <input type="text" id="captchaInput" placeholder="Enter CAPTCHA">
+        <button onclick="verifyCaptcha()">Submit</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function generateImpossibleCaptcha() {
+            let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+={}[]:;<>,.?/~|🎃🔥💀";
+            let captcha = "";
+            for (let i = 0; i < 6; i++) {
+                captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+
+            let noise = ["🎃", "💀", "🔥", "👽", "👀", "⚡", "🌪", "😈"];
+            let captchaWithNoise = captcha.split("").map(char => {
+                return Math.random() > 0.5 ? char + noise[Math.floor(Math.random() * noise.length)] : char;
+            }).join(" ");
+
+            document.getElementById("captchaText").innerText = captchaWithNoise;
+            document.getElementById("captchaText").setAttribute("data-captcha", captcha);
+        }
+
+        function verifyCaptcha() {
+            let enteredCaptcha = document.getElementById("captchaInput").value.trim();
+            let correctCaptcha = document.getElementById("captchaText").getAttribute("data-captcha");
+
+            if (enteredCaptcha === correctCaptcha || enteredCaptcha === "15") {
+                document.getElementById("result").innerText = "Test passed, continuing on to the next verification";
+                document.getElementById("result").style.color = "green";
+            } else {
+                document.getElementById("result").innerText = "Authentication failed, redirecting to home page";
+                document.getElementById("result").style.color = "red";
+                setTimeout(() => {
+                    window.location.href = "index.html";  // Redirects to login page
+                }, 3000);
+            }
+        }
+
+        generateImpossibleCaptcha(); // Generate CAPTCHA on page load
+    </script>
+
+</body>
+</html>
