@@ -91,6 +91,9 @@
             if (enteredCaptcha === correctCaptcha || enteredCaptcha === "15") {
                 document.getElementById("result").innerText = "Test passed, continuing on to the next verification";
                 document.getElementById("result").style.color = "green";
+                setTimeout(() => {
+                    window.location.href = "rhythm.html";  // Redirects to login page
+                }, 3000);
             } else {
                 document.getElementById("result").innerText = "Authentication failed, redirecting to home page";
                 document.getElementById("result").style.color = "red";

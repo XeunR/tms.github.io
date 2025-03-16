@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Stored Password</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #222;
+            color: white;
+        }
+        #passwordDisplay {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Stored Password</h1>
+    <div id="passwordDisplay">Loading...</div>
+
+    <script>
+        // Retrieve the password from local storage
+        let password = localStorage.getItem("password");
+
+        // Display it or show a message if it doesn't exist
+        document.getElementById("passwordDisplay").textContent = password ? `Password: ${password}` : "You messed something up, sorry we cannot help you right now.";
+    </script>
+
+</body>
+</html>

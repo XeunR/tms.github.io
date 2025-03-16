@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rhythm Game</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+
+    #game-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    .note-column {
+      position: relative;
+      width: 100px;
+      height: 500px;
+      border: 1px solid white;
+      margin: 0 10px;
+      overflow: hidden;
+      background-color: #222;
+    }
+
+    .note {
+      position: absolute;
+      top: 0;
+      width: 80px;
+      height: 20px;
+      background-color: red;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    #score {
+      margin-top: 20px;
+      font-size: 24px;
+    }
+
+    #health {
+      margin-top: 20px;
+      font-size: 24px;
+      color: red;
+    }
+    #endtext {
+      margin-top: 20px;
+      font-size: 24px;
+
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <div class="note-column" data-key="65"></div> <!-- A key -->
+    <div class="note-column" data-key="83"></div> <!-- S key -->
+    <div class="note-column" data-key="68"></div> <!-- D key -->
+    <div class="note-column" data-key="70"></div> <!-- F key -->
+  </div>
+  <div id="score">Score: 0</div>
+  <div id="health">Health: 100</div>
+  <div id="endtext"></div>
+
+  <script>
+    let score = 0;
+    let health = 100;
+    let gameOver = false;
+
+    const scoreDisplay = document.getElementById('score');
+    const healthDisplay = document.getElementById('health');
+
+    function createNote() {
+      if (gameOver) return; // Stop spawning if game is over
+
+      const columns = document.querySelectorAll('.note-column');
+      const randomColumn = columns[Math.floor(Math.random() * columns.length)];
+      const note = document.createElement('div');
+      note.classList.add('note');
+      note.dataset.key = randomColumn.dataset.key;
+      randomColumn.appendChild(note);
+
+      let notePosition = 0;
+      const speed = 10; // Note falling speed
+      const moveNote = setInterval(() => {
+        notePosition += speed;
+        note.style.top = notePosition + 'px';
+
+        if (notePosition > 500) { // If note is missed
+          clearInterval(moveNote);
+          note.remove();
+          loseHealth();
+        }
+      }, 20);
+
+      note.dataset.intervalId = moveNote; // Store interval ID for stopping when hit
+    }
+
+    function loseHealth() {
+      if (gameOver) return;
+      health -= 10;
+      healthDisplay.textContent = `Health: ${health}`;
+      if (health <= 0) {
+        gameOver = true;
+        document.getElementById("endtext").innerText = "Game over! Authentication failed";
+        document.getElementById("result").style.color = "red";
+        setTimeout(() => {
+            window.location.href = "index.html";  // Redirects to login page
+        }, 3000);
+      }
+    }
+
+    function checkHit(e) {
+      const notes = document.querySelectorAll('.note');
+      notes.forEach(note => {
+        if (parseInt(note.dataset.key) === e.keyCode) { // Convert dataset key to number
+          const noteRect = note.getBoundingClientRect();
+          const containerRect = note.parentElement.getBoundingClientRect();
+
+          // Improved tolerance range (30px above and below hit line)
+          if (noteRect.top >= containerRect.bottom - 50 && noteRect.top <= containerRect.bottom - 10) {
+            clearInterval(note.dataset.intervalId); // Stop note movement
+            note.remove();
+            score += 10;
+            scoreDisplay.textContent = `Score: ${score}`;
+            if (score = 500) {
+              document.getElementById("endtext").innerText = "Success! Authenticated!";
+              document.getElementById("result").style.color = "green";
+              setTimeout(() => {
+                window.location.href = "finish.html";
+                }, 3000);
+              }
+          }
+        }
+      });
+    }
+
+    document.addEventListener('keydown', checkHit);
+
+    function startRandomNotes() {
+      if (gameOver) return; // Stop if game over
+      createNote(); // Create a note immediately
+      const randomDelay = Math.random() * (1000 - 300) + 300; // Random delay between 300ms - 1000ms
+      setTimeout(startRandomNotes, randomDelay); // Recursively call function with random delay
+    }
+
+    startRandomNotes(); // Start generating multiple notes
+  </script>
+</body>
+</html>
