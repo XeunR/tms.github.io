@@ -70,7 +70,7 @@
             let password = document.getElementById("password").value;
             let errorMessage = document.getElementById("error-message");
 
-            if (password.length < 2) {
+            if (password.length < 50) {
                 errorMessage.innerText = "Password too short!";
                 return;
             }
