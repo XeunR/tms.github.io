@@ -109,7 +109,7 @@
       if (health <= 0) {
         gameOver = true;
         document.getElementById("endtext").innerText = "Game over! Authentication failed";
-        document.getElementById("result").style.color = "red";
+        document.getElementById("endtext").style.color = "red";
         setTimeout(() => {
             window.location.href = "index.html";  // Redirects to login page
         }, 3000);
@@ -131,7 +131,7 @@
             scoreDisplay.textContent = `Score: ${score}`;
             if (score = 500) {
               document.getElementById("endtext").innerText = "Success! Authenticated!";
-              document.getElementById("result").style.color = "green";
+              document.getElementById("endtext").style.color = "green";
               setTimeout(() => {
                 window.location.href = "finish.html";
                 }, 3000);
