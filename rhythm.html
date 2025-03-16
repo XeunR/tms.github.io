@@ -87,7 +87,7 @@
       randomColumn.appendChild(note);
 
       let notePosition = 0;
-      const speed = 10; // Note falling speed
+      const speed = 8; // Note falling speed
       const moveNote = setInterval(() => {
         notePosition += speed;
         note.style.top = notePosition + 'px';
@@ -129,7 +129,7 @@
             note.remove();
             score += 10;
             scoreDisplay.textContent = `Score: ${score}`;
-            if (score = 500) {
+            if (score === 500) {
               document.getElementById("endtext").innerText = "Success! Authenticated!";
               document.getElementById("endtext").style.color = "green";
               setTimeout(() => {
